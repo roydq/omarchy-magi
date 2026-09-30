@@ -13,8 +13,10 @@ with your machine's real load, memory, battery, temperature and uptime.
 Every few minutes, PATTERN BLUE: an EMERGENCY alert, then Ramiel, the fifth
 Angel, tumbling in a targeting reticle as its range closes in.
 
-Colors come from the current Omarchy theme, so it fits any theme. It's written
-in Rust and draws with braille characters for 2×4 dots per cell.
+Colors come from the current Omarchy theme, so it fits any theme; the
+screenshots use [NERV](https://github.com/roydq/omarchy-nerv-theme), made to
+go with it. It's written in Rust and draws with braille characters for 2×4
+dots per cell.
 
 ![The MAGI rejecting HQ self-destruct](screenshots/magi.png)
 
