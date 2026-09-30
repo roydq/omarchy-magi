@@ -1,0 +1,21 @@
+[package]
+name = "omarchy-magi"
+version = "0.2.0"
+edition = "2024"
+description = "A NERV-style terminal screensaver for Omarchy"
+license = "MIT"
+repository = "https://github.com/roydq/omarchy-magi"
+
+[[bin]]
+name = "magi"
+path = "src/main.rs"
+
+[dependencies]
+crossterm = "0.28"
+libc = "0.2"
+signal-hook = "0.3"
+unicode-width = "0.2"
+
+[profile.release]
+lto = "thin"
+strip = true

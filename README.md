@@ -2,30 +2,45 @@
 
 A NERV-style terminal screensaver for [Omarchy](https://omarchy.org).
 
-The three MAGI supercomputers deliberate one proposal after another over a
-hex grid: BALTHASAR, CASPER and MELCHIOR each blink 審議中 while they think,
-then vote 承認 (approve) or 否決 (reject), and the verdict lands underneath.
-Below them, Unit-01's sync rate scrolls by next to a MAGI log that mixes
-flavor text with your machine's real load, memory, battery, temperature and
-uptime. Every few minutes a PATTERN BLUE alert takes over the screen.
+It boots like the MAGI system itself, checking your real CPU and memory and
+bringing MELCHIOR, BALTHASAR and CASPER online one by one. Then the three
+supercomputers deliberate one proposal after another: each blinks 審議中
+while it thinks, votes 承認 (approve) or 否決 (reject), and the verdict lands
+underneath. A.T. Field shockwaves roll across the hex grid, Units 00, 01 and
+02's sync ratios trace an oscilloscope, and the MAGI log mixes flavor text
+with your machine's real load, memory, battery, temperature and uptime.
 
-Colors come from the current Omarchy theme, so it fits any theme. It redraws
-only the cells that change, at 10 fps.
+Every few minutes, PATTERN BLUE: an EMERGENCY alert, then Ramiel, the fifth
+Angel, tumbling in a targeting reticle as its range closes in.
 
-![The MAGI approving a proposal 2:1](screenshots/magi.png)
+Colors come from the current Omarchy theme, so it fits any theme. It's written
+in Rust and draws with braille characters for 2×4 dots per cell.
 
-![A PATTERN BLUE alert](screenshots/alert.png)
+![The MAGI rejecting HQ self-destruct](screenshots/magi.png)
 
-## Preview
+![Ramiel in the targeting reticle](screenshots/ramiel.png)
+
+| Boot | PATTERN BLUE |
+| --- | --- |
+| ![The MAGI boot sequence](screenshots/boot.png) | ![The EMERGENCY alert](screenshots/alert.png) |
+
+## Build and preview
+
+It needs Rust (`mise use -g rust`, or `sudo pacman -S rust`) and a font with
+Japanese glyphs, which Omarchy ships.
 
 ```sh
 git clone https://github.com/roydq/omarchy-magi ~/.local/share/omarchy-magi
-~/.local/share/omarchy-magi/magi            # any key exits
-~/.local/share/omarchy-magi/magi --alert    # start on the alert
+cd ~/.local/share/omarchy-magi
+cargo build --release
+./target/release/magi              # any key exits
+./target/release/magi --alert      # start on a PATTERN BLUE alert
+./target/release/magi --no-boot    # skip the boot sequence
 ```
 
-It needs Python 3 and a font with Japanese glyphs, both of which Omarchy
-ships. `MAGI_HOST` replaces the hostname shown in the footer.
+`MAGI_HOST` replaces the hostname shown in the footer. `MAGI_FPS` sets the
+frame rate (default 15). Most of the CPU cost is the terminal redrawing each
+frame, so lower it to save battery.
 
 ## Use it as the Omarchy screensaver
 
@@ -39,7 +54,7 @@ takes an overrides directory placed ahead of them:
 ```sh
 # Link MAGI in as omarchy-screensaver
 mkdir -p ~/.local/share/omarchy-overrides/bin
-ln -s ~/.local/share/omarchy-magi/magi ~/.local/share/omarchy-overrides/bin/omarchy-screensaver
+ln -s ~/.local/share/omarchy-magi/target/release/magi ~/.local/share/omarchy-overrides/bin/omarchy-screensaver
 
 # Put the overrides directory first on Hyprland's PATH
 cp ~/.local/share/omarchy-magi/omarchy-overrides.lua ~/.config/hypr/
@@ -49,7 +64,9 @@ hyprctl reload
 
 Then `omarchy launch screensaver force` shows it right away, or wait for the
 idle timeout. To go back to Omarchy's screensaver, delete the
-`omarchy-screensaver` link.
+`omarchy-screensaver` link. The screensaver doesn't see your shell's
+environment, so set `MAGI_FPS` or `MAGI_HOST` for it with
+`hl.env("MAGI_FPS", "10")` in your Hyprland config.
 
 Open Omarchy pull requests would replace this setup with a setting:
 [#9493](https://github.com/omacom/omarchy/pull/9493) (screensaver plugins) and
