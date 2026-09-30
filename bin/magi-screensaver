@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Omarchy screensaver plugin entry point. The built-in launcher opens a
+# fullscreen terminal on each monitor and runs MAGI in each one; MAGI exits on
+# input or lost focus, closes the other monitors' windows and restores the
+# cursor itself.
+
+root=$(dirname -- "$(dirname -- "$(realpath -- "$0")")")
+
+# The binary comes from bin/magi-fetch or a cargo build
+for magi in "$root/magi" "$root/target/release/magi"; do
+  if [[ -x $magi ]]; then
+    exec omarchy-launch-screensaver --exec "$magi"
+  fi
+done
+
+# No binary yet, so don't leave the machine without a screensaver
+exec omarchy-launch-screensaver

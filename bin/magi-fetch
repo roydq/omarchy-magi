@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Download the prebuilt MAGI binary for this machine from the latest GitHub
+# release, next to the plugin's manifest. Building from source works too:
+# `cargo build --release` in this repo.
+
+set -euo pipefail
+
+case $(uname -m) in
+x86_64) asset=magi-x86_64-linux ;;
+aarch64) asset=magi-aarch64-linux ;;
+*)
+  echo "magi-fetch: no prebuilt binary for $(uname -m), build with: cargo build --release" >&2
+  exit 1
+  ;;
+esac
+
+root=$(dirname -- "$(dirname -- "$(realpath -- "$0")")")
+url=https://github.com/roydq/omarchy-magi/releases/latest/download/$asset
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+curl -fsSL "$url" -o "$tmp/$asset"
+curl -fsSL "$url.sha256" -o "$tmp/$asset.sha256"
+(cd "$tmp" && sha256sum --check --quiet "$asset.sha256")
+
+install -m 755 "$tmp/$asset" "$root/magi"
+echo "Installed $root/magi"

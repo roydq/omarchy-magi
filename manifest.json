@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "roydq.magi",
+  "name": "MAGI",
+  "version": "0.2.0",
+  "author": "Roy Quader",
+  "license": "MIT",
+  "description": "A NERV-style terminal screensaver: the MAGI deliberate, sync ratios trace an oscilloscope, and PATTERN BLUE alerts bring Ramiel.",
+  "kinds": [
+    "screensaver"
+  ],
+  "entryPoints": {
+    "screensaver": "bin/magi-screensaver"
+  }
+}
