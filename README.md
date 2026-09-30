@@ -24,18 +24,36 @@ in Rust and draws with braille characters for 2×4 dots per cell.
 | --- | --- |
 | ![The MAGI boot sequence](screenshots/boot.png) | ![The EMERGENCY alert](screenshots/alert.png) |
 
-## Build and preview
+## Install
 
-It needs Rust (`mise use -g rust`, or `sudo pacman -S rust`) and a font with
-Japanese glyphs, which Omarchy ships.
+Download a prebuilt binary (static, so it runs on any Linux; use
+`magi-aarch64-linux` on ARM):
+
+```sh
+mkdir -p ~/.local/share/omarchy-magi
+curl -fL https://github.com/roydq/omarchy-magi/releases/latest/download/magi-x86_64-linux \
+  -o ~/.local/share/omarchy-magi/magi
+chmod +x ~/.local/share/omarchy-magi/magi
+```
+
+Or build it from source, which needs Rust (`mise use -g rust`, or
+`sudo pacman -S rust`):
 
 ```sh
 git clone https://github.com/roydq/omarchy-magi ~/.local/share/omarchy-magi
 cd ~/.local/share/omarchy-magi
 cargo build --release
-./target/release/magi              # any key exits
-./target/release/magi --alert      # start on a PATTERN BLUE alert
-./target/release/magi --no-boot    # skip the boot sequence
+ln -s target/release/magi magi
+```
+
+Either way it needs a font with Japanese glyphs, which Omarchy ships.
+
+## Preview
+
+```sh
+~/.local/share/omarchy-magi/magi              # any key exits
+~/.local/share/omarchy-magi/magi --alert      # start on a PATTERN BLUE alert
+~/.local/share/omarchy-magi/magi --no-boot    # skip the boot sequence
 ```
 
 `MAGI_HOST` replaces the hostname shown in the footer. `MAGI_FPS` sets the
@@ -54,10 +72,11 @@ takes an overrides directory placed ahead of them:
 ```sh
 # Link MAGI in as omarchy-screensaver
 mkdir -p ~/.local/share/omarchy-overrides/bin
-ln -s ~/.local/share/omarchy-magi/target/release/magi ~/.local/share/omarchy-overrides/bin/omarchy-screensaver
+ln -s ~/.local/share/omarchy-magi/magi ~/.local/share/omarchy-overrides/bin/omarchy-screensaver
 
 # Put the overrides directory first on Hyprland's PATH
-cp ~/.local/share/omarchy-magi/omarchy-overrides.lua ~/.config/hypr/
+curl -fL https://raw.githubusercontent.com/roydq/omarchy-magi/main/omarchy-overrides.lua \
+  -o ~/.config/hypr/omarchy-overrides.lua
 echo 'require("hypr.omarchy-overrides")' >> ~/.config/hypr/hyprland.lua
 hyprctl reload
 ```
